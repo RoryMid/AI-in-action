@@ -12,7 +12,7 @@ vector_search = VectorSearch()
 
 @main.route('/')
 def index():
-    return render_template('../index.html')
+    return render_template('index.html')
 
 @main.route('/chat', methods=['GET', 'POST'])
 def chat():
@@ -36,7 +36,7 @@ def upload():
             path = os.path.join('uploads', filename)
             f.save(path)
             mongo.insert_uploaded_pdf(path)
-    files = os.listdir('uploads')
+        files = os.listdir('uploads')
     return render_template('upload.html', files=files)
 
 @main.route('/sources')
