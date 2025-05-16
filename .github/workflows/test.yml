@@ -24,5 +24,6 @@ jobs:
       run: |
         pytest tests/test_chatbot.py --disable-warnings -q
     - name: Run ingestion tests
+      if: ${{ !cancelled() }}
       run: |
         pytest tests/test_ingestion.py --disable-warnings -q
