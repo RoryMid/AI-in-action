@@ -22,7 +22,7 @@ def client():
 
 def test_chat_post(client: FlaskClient, monkeypatch):
     # Patch vertexai.init to prevent real GCP setup
-    monkeypatch.setattr("chatbot.vertex.vertexai.init", lambda *args, **kwargs: None)
+    monkeypatch.setattr("chatbot.app.vertex.vertexai.init", lambda *args, **kwargs: None)
 
     # Patch ChatModel.from_pretrained to return a mock model
     class MockChatModel:
@@ -30,7 +30,7 @@ def test_chat_post(client: FlaskClient, monkeypatch):
             return type("MockResponse", (), {"text": "Mocked response"})
 
     monkeypatch.setattr(
-        "chatbot.vertex.vertexai.preview.language_models.ChatModel.from_pretrained",
+        "chatbot.app.vertex.vertexai.preview.language_models.ChatModel.from_pretrained",
         lambda *args, **kwargs: MockChatModel()
     )
 
