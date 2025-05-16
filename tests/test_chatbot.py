@@ -1,6 +1,7 @@
 import pytest
 from flask.testing import FlaskClient
 from chatbot.app import create_app
+from chatbot.app import vector_search, vertex
 
 
 def test_index(client):
@@ -20,18 +21,16 @@ def client():
         yield client
 
 def test_chat_post(client: FlaskClient, monkeypatch):
-    from chatbot.app import vector_search, vertex
-
     # Mock vector search
     monkeypatch.setattr("chatbot.app.vector_search.VectorSearch.search", lambda self, q: [
         {"content": "Test doc", "url": "http://example.com"}
     ])
 
+    monkeypatch.setattr(vertex, "ask_vertex_ai", mock_ask)
+
     # Mock ask_vertex_ai directly to avoid triggering VertexAI auth
     def mock_ask(query, docs):
         return "Mocked response", ["http://example.com"]
-
-    monkeypatch.setattr(vertex, "ask_vertex_ai", mock_ask)
 
     # Now trigger the route
     response = client.post("/chat", data={"query": "What is policy X?"})
