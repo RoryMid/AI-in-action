@@ -1,5 +1,5 @@
-resource "google_cloud_run_service" "ingestion" {
-  name     = "ingestion"
+resource "google_cloud_run_service" "chatbot" {
+  name     = "chatbot"
   location = var.region
 
   template {

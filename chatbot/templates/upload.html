@@ -1,1 +1,15 @@
-# Placeholder for upload.html
+{% extends "base.html" %}
+{% block title %}Upload{% endblock %}
+{% block content %}
+  <h2>Upload PDFs</h2>
+  <form method="post" enctype="multipart/form-data">
+    <input type="file" name="files" multiple required />
+    <button type="submit">Upload</button>
+  </form>
+  <h3>Uploaded Files</h3>
+  <ul>
+    {% for f in files %}
+      <li>{{ f }} - <a href="{{ url_for('main.download_file', filename=f) }}">Download</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}

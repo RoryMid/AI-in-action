@@ -1,1 +1,23 @@
-# Placeholder for chat.html
+{% extends "base.html" %}
+{% block title %}Chat{% endblock %}
+{% block content %}
+  <h2>Ask a Question</h2>
+  <form method="post">
+    <input type="text" name="query" required placeholder="Enter your question" />
+    <button type="submit">Ask</button>
+  </form>
+  {% if response %}
+    <div class="response">
+      <h3>Answer</h3>
+      <p>{{ response }}</p>
+      {% if citations %}
+        <h4>Sources:</h4>
+        <ul>
+          {% for cite in citations %}
+            <li><a href="{{ cite }}" target="_blank">{{ cite }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  {% endif %}
+{% endblock %}

@@ -1,1 +1,10 @@
-# Placeholder for sources.html
+{% extends "base.html" %}
+{% block title %}Sources{% endblock %}
+{% block content %}
+  <h2>All Ingested Documents</h2>
+  <ul>
+    {% for doc in docs %}
+      <li>{{ doc.filename }}{% if doc.url %} - <a href="{{ doc.url }}" target="_blank">View</a>{% endif %}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

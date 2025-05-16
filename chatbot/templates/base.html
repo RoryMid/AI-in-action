@@ -1,1 +1,33 @@
-# Placeholder for base.html
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Government Gateway{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <script>
+      function toggleDarkMode() {
+          const html = document.documentElement;
+          if (html.getAttribute('data-theme') === 'dark') {
+              html.setAttribute('data-theme', 'light');
+          } else {
+              html.setAttribute('data-theme', 'dark');
+          }
+      }
+    </script>
+</head>
+<body>
+    <header>
+      <nav>
+        <a href="{{ url_for('main.index') }}">Home</a> |
+        <a href="{{ url_for('main.chat') }}">Chat</a> |
+        <a href="{{ url_for('main.upload') }}">Upload</a> |
+        <a href="{{ url_for('main.sources') }}">Sources</a> |
+        <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+      </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
