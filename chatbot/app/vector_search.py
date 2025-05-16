@@ -3,7 +3,7 @@ class VectorSearch:
         # Initialize your vector store here or connect to it
         pass
 
-    @static_method
+    @staticmethod
     def search(query):
         # TODO: Replace with real vector similarity search on MongoDB or external vector db
         return [
