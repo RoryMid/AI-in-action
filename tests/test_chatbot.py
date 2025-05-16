@@ -1,3 +1,7 @@
+import pytest
+from flask.testing import FlaskClient
+
+
 def test_index(client):
     response = client.get("/")
     assert response.status_code == 200
@@ -7,17 +11,28 @@ def test_upload_get(client):
     response = client.get("/upload")
     assert response.status_code == 200
 
-def test_chat_post(client, monkeypatch):
-    def mock_search(query):
-        return [{"content": "Test doc", "url": "http://example.com"}]
-    
-    def mock_ask(query, docs):
-        return "Mock answer", [doc["url"] for doc in docs]
+@pytest.fixture
+def client():
+    from chatbot.app import app
+    app.config["TESTING"] = True
+    with app.test_client() as client:
+        yield client
 
+def test_chat_post(client: FlaskClient, monkeypatch):
     from chatbot.app import vector_search, vertex
-    monkeypatch.setattr("chatbot.app.vector_search.VectorSearch.search", lambda self, q: mock_search(q))
+
+    # Mock vector search
+    monkeypatch.setattr("chatbot.app.vector_search.VectorSearch.search", lambda self, q: [
+        {"content": "Test doc", "url": "http://example.com"}
+    ])
+
+    # Mock ask_vertex_ai directly to avoid triggering VertexAI auth
+    def mock_ask(query, docs):
+        return "Mocked response", ["http://example.com"]
+
     monkeypatch.setattr(vertex, "ask_vertex_ai", mock_ask)
 
+    # Now trigger the route
     response = client.post("/chat", data={"query": "What is policy X?"})
     assert response.status_code == 200
-    assert b"Mock answer" in response.data
+    assert b"Mocked response" in response.data
