@@ -1,5 +1,9 @@
 def test_mongo_insert(monkeypatch):
-    from ingestion.oop.mongo_connector import MongoConnector
+    import ingestion.oop.mongo_connector as mongo_connector
+
+    monkeypatch.setattr(mongo_connector, "MongoClient", lambda uri: MockClient())
+    mongo = mongo_connector.MongoConnector()
+    mongo.insert_document("test.pdf", "content here")
 
     class MockCollection:
         def insert_one(self, doc):

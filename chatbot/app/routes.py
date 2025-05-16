@@ -30,6 +30,7 @@ def chat():
 
 @main.route('/upload', methods=['GET', 'POST'])
 def upload():
+    files = []
     if request.method == 'POST':
         for f in request.files.getlist('files'):
             filename = secure_filename(f.filename)
