@@ -21,18 +21,26 @@ def client():
         yield client
 
 def test_chat_post(client: FlaskClient, monkeypatch):
-    # Mock vector search
+    # Patch vertexai.init to prevent real GCP setup
+    monkeypatch.setattr("chatbot.vertex.vertexai.init", lambda *args, **kwargs: None)
+
+    # Patch ChatModel.from_pretrained to return a mock model
+    class MockChatModel:
+        def __call__(self, prompt, **kwargs):
+            return type("MockResponse", (), {"text": "Mocked response"})
+
+    monkeypatch.setattr(
+        "chatbot.vertex.vertexai.preview.language_models.ChatModel.from_pretrained",
+        lambda *args, **kwargs: MockChatModel()
+    )
+
+    # Patch vector search to return a dummy document
     monkeypatch.setattr("chatbot.app.vector_search.VectorSearch.search", lambda self, q: [
         {"content": "Test doc", "url": "http://example.com"}
     ])
 
-    monkeypatch.setattr(vertex, "ask_vertex_ai", mock_ask)
-
-    # Mock ask_vertex_ai directly to avoid triggering VertexAI auth
-    def mock_ask(query, docs):
-        return "Mocked response", ["http://example.com"]
-
-    # Now trigger the route
+    # Run the actual POST request
     response = client.post("/chat", data={"query": "What is policy X?"})
+
     assert response.status_code == 200
     assert b"Mocked response" in response.data
