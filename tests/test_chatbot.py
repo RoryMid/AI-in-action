@@ -33,7 +33,7 @@ def test_chat_post(monkeypatch, client):
         def start_chat(self, **kwargs):
             return MockChatSession()
 
-    monkeypatch.setattr("chatbot.vertex.ChatModel", lambda **kwargs: MockChatModel())
+    monkeypatch.setattr("chatbot.app.vertex.ChatModel", lambda **kwargs: MockChatModel())
 
     response = client.post("/chat", json={"prompt": "Test prompt"})
     assert response.status_code == 200
