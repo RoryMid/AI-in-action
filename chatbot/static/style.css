@@ -1,0 +1,21 @@
+body {
+  font-family: sans-serif;
+  padding: 2rem;
+  background-color: var(--background);
+  color: var(--text);
+}
+
+[data-theme="light"] {
+  --background: #ffffff;
+  --text: #000000;
+}
+
+[data-theme="dark"] {
+  --background: #1e1e1e;
+  --text: #e0e0e0;
+}
+
+input, button {
+  padding: 0.5rem;
+  margin-top: 1rem;
+}
