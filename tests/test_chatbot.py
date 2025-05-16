@@ -1,5 +1,6 @@
 import pytest
 from flask.testing import FlaskClient
+from chatbot.app import create_app
 
 
 def test_index(client):
@@ -13,7 +14,7 @@ def test_upload_get(client):
 
 @pytest.fixture
 def client():
-    from chatbot.app import app
+    app = create_app()
     app.config["TESTING"] = True
     with app.test_client() as client:
         yield client
