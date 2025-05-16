@@ -22,7 +22,7 @@ jobs:
         pip install pytest
     - name: Run chatbot tests
       run: |
-        pytest tests/test_chatbot.py --maxfail=1 --disable-warnings -q
+        pytest tests/test_chatbot.py --disable-warnings -q
     - name: Run ingestion tests
       run: |
-        pytest tests/test_ingestion.py --maxfail=1 --disable-warnings -q
+        pytest tests/test_ingestion.py --disable-warnings -q
